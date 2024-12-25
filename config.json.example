@@ -1,0 +1,8 @@
+{
+    "ibkr_port_paper": 7497,
+    "ibkr_port_live": 7496,
+    "ibkr_account_paper": "DU012345",
+    "ibkr_account_live": "DU012345",
+    "allow_shorting": false,
+    "export_csv_style": "tradesviz"
+}
