@@ -1,4 +1,4 @@
-from ibkr_keyboard_trader import Trader
+from ibkr_speed_dt import Trader
 import sys
 
 if __name__ == '__main__':

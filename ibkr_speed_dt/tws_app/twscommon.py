@@ -1,7 +1,7 @@
 import logging
 import json
 
-from ibkr_keyboard_trader.util.twslogging import setup_logger
+from ibkr_speed_dt.util.twslogging import setup_logger
 from .datastore.order import Order
 from .datastore.fundamentals import StockFundamentals
 from .datastore.accountentry import TWSAccountEntry

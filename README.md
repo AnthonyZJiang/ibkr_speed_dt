@@ -1,10 +1,23 @@
-# ibkr_keyboard_trader
-A keyboard trader for Interactive Broker Trader Workstation (IBKR TWS)
+# IBKR Speed Day Trader
+Interactive Broker Trader Workstation (IBKR TWS) isn't well tuned for fast paced momo day trading. This is my attempt to make it right.
 
-This is not to replace TWS but work along side TWS for faster order management using solely a keyboard.
+### Features
+- Fast keyboard based trading
+- Fast fundamentals exploring
+- (Planned) Spread warning
+- (Planned) Technical indicator warning (MACD cross, EMAs, Volume etc.)
+
+## Dependencies
+- Python >= 3.13
+- `python -m pip install -r requirements.txt`
 
 ## Use
+Make your own copy of `config.json.example` and rename it to `config.json`. Edit accordingly to your preference. You must replace the values for IBKR accounts with your account numbers.
 
+Then open a terminal in the current folder and type:
+```
+python run.py
+```
 
 ## Commands
 ```

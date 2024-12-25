@@ -1,5 +1,5 @@
 from pathlib import Path
-from ibkr_keyboard_trader.tws_app.datastore.order import Order, OrderStatus, OrderAction
+from ibkr_speed_dt.tws_app.datastore.order import Order, OrderStatus, OrderAction
 from .twslogging import setup_logger
 
 
