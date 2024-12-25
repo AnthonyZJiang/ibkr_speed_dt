@@ -224,9 +224,7 @@ class CLIFront:
 
     def _print_help(self):
         self.console.rule("Commands")
-        self.console.print("ls [green]Print all orders")
-        self.console.print("ls pos [green]Print all orders or positions")
-        self.console.print("ls u [green]Print all orders unsorted")
+        self.console.print("link <id> [green]Link to a display group")
         self.console.print("t <symbol> [green]Track a symbol")
         self.console.print("x<quantity> <limit> st<stop> [green]Buy the tracked symbol")
         self.console.print("s<quantity> <limit> st<stop> [green]Sell the tracked symbol")

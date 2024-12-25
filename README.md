@@ -8,6 +8,9 @@ This is not to replace TWS but work along side TWS for faster order management u
 
 ## Commands
 ```
+help
+    Shows a quick command help.
+    
 link {id}
     Link with display group by id. The default value can be changed in config.json.
     e.g. "link 1" will link with display group 1, i.e. the red group.
