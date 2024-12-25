@@ -4,5 +4,6 @@
     "ibkr_account_paper": "DU012345",
     "ibkr_account_live": "DU012345",
     "allow_shorting": false,
-    "export_csv_style": "tradesviz"
+    "export_csv_style": "tradesviz",
+    "default_display_group": 1
 }

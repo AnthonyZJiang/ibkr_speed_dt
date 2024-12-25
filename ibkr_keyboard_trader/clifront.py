@@ -21,7 +21,6 @@ class CLIFront:
         self.app_thread = None
         self.order = None
         self.default_quantity = DEFAULT_ORDER_SIZE
-        self.quantity_multiplier = 100
         self.console = Console()
         self.platform_type = platform_type
         
@@ -35,7 +34,7 @@ class CLIFront:
         while not self.tws_app.tws_common.is_ready:
             time.sleep(0.1)
         self.logger.info("TWSApp ready.")
-        self.tws_app.link_display_group(1)
+        self.tws_app.link_display_group(self.tws_app.tws_common.config['default_display_group'])
         exit_flag = False
         self.print_tracking_symbol = False
         while not exit_flag:
@@ -189,7 +188,7 @@ class CLIFront:
         stop = None
         for arg in args:
             if arg.startswith("qm"):
-                quantity = int(float(arg[2:]) * self.quantity_multiplier)
+                quantity = int(float(arg[2:]) * self.default_quantity)
             elif arg.startswith("q"):
                 quantity = int(float(arg[1:]))
             elif arg.startswith("l"):
@@ -217,39 +216,26 @@ class CLIFront:
                     return
                 self.tws_app.tws_common.allow_short = True if args[1] == "1" else False
                 print("Short selling is", "enabled" if self.tws_app.tws_common.allow_short else "disabled")
-            case "quantity_multiplier":
-                if nargs == 1:
-                    print("No value provided")
-                    return
-                self.quantity_multiplier = int(args[1])
-                print("Quantity multiplier set to", self.quantity_multiplier)
             case _:
                 print("Unknown parameter")
-        self.default_quantity = int(args[1])
         
     def export_trades(self, dest: str):
         export_funcs[self.tws_app.tws_common.config['export_csv_style']](dest, self.tws_app.tws_common.completed_orders)
 
     def _print_help(self):
         self.console.rule("Commands")
-        self.console.print("get f [green]Get fundamentals for the current symbol")
-        self.console.print("get f <symbol> [green]Get fundamentals for the specified symbol")
         self.console.print("ls [green]Print all orders")
         self.console.print("ls pos [green]Print all orders or positions")
         self.console.print("ls u [green]Print all orders unsorted")
-        self.console.print("set <default_quantity <quantity>> [green]Set the default quantity, default is 100")
-        self.console.print("set <allow_short <1|0>> [green]Set 1 to allow short selling")
         self.console.print("t <symbol> [green]Track a symbol")
-        self.console.print("x<quantity> <limit> [green]Buy the tracked symbol")
-        self.console.print("   e.g. x10 11.5 [green]Buy 10x<default quantity> shares at $11.5.")
-        self.console.print("   e.g. x5 [green]Buy 5x<default quantity> shares at market price.")
-        self.console.print("   e.g. x 11.5 [green]Buy 1x<default quantity> shares at $11.5.")
-        self.console.print("s<quantity> <limit> [green]Sell the tracked symbol")
-        self.console.print("   e.g. s10 11.5 [green]Sell 10x<default quantity> shares at $11.5.")
-        self.console.print("st<quantity> <limit> [green]Set stop loss for the tracked symbol")
+        self.console.print("x<quantity> <limit> st<stop> [green]Buy the tracked symbol")
+        self.console.print("s<quantity> <limit> st<stop> [green]Sell the tracked symbol")
         self.console.print("cl [green]Close the current position for the tracked symbol")
         self.console.print("c [green]Cancel the last order")
-        self.console.print("c<order_id> [green]Cancel order by id")
+        self.console.print("c <order_id> [green]Cancel order by id")
         self.console.print("c a [green]Cancel all orders")
+        self.console.print("get f [green]Get fundamentals for the current symbol")
+        self.console.print("get f <symbol> [green]Get fundamentals for the specified symbol")
+        self.console.print("set <default_quantity <quantity>> [green]Set the default quantity, default is 100")
+        self.console.print("set <allow_short <1|0>> [green]Set 1 to allow short selling")
         self.console.print("exit [green]Exit the program")
-
