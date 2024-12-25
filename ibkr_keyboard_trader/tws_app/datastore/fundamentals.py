@@ -46,14 +46,14 @@ class StockFundamentals():
             return dict[key] if key in dict else default
         f = StockFundamentals(sym)
         ticker_info = FinvizLite(sym).ticker_fundament()
-        f.mark_cap = get_key_value(flkeys, ticker_info, -1)
-        f.float = get_key_value(flkeys.shs_float, ticker_info, -1)
-        f.shortable_shares = get_key_value(flkeys.short_float, ticker_info, -1)
-        f.short_ratio = get_key_value(flkeys.short_ratio, ticker_info, -1)
-        f.country = get_key_value(flkeys.country, ticker_info, "Unknown")
-        f.exchange = get_key_value(flkeys.exchange, ticker_info, "Unknown")
-        f.short_name = get_key_value(flkeys.company, ticker_info, "Unknown")
-        f.sector = get_key_value(flkeys.sector, ticker_info, "Unknown")
+        f.mark_cap = get_key_value(FKey.market_cap, ticker_info, -1)
+        f.float = get_key_value(FKey.shs_float, ticker_info, -1)
+        f.shortable_shares = get_key_value(FKey.short_float, ticker_info, -1)
+        f.short_ratio = get_key_value(FKey.short_ratio, ticker_info, -1)
+        f.country = get_key_value(FKey.country, ticker_info, "Unknown")
+        f.exchange = get_key_value(FKey.exchange, ticker_info, "Unknown")
+        f.short_name = get_key_value(FKey.company, ticker_info, "Unknown")
+        f.sector = get_key_value(FKey.sector, ticker_info, "Unknown")
         f.ceo = "Unknown"
         return f
         
