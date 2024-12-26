@@ -5,7 +5,7 @@ from .twslogging import setup_logger
 
 def export_trades_tradesviz(destination: str, orders: dict[int, Order]):
     logger = setup_logger()
-    header = "Date,STK,Time,Action,OrderType,Price,Quantity,Value,Position,Profit,Fee\n"
+    header = "date,time,symbol,asset_type,price,currency,quantity,commission,tags,notes\n"
     if Path(destination).exists():
         with open(destination, "r") as f:
             first_line = f.readline()
@@ -19,14 +19,14 @@ def export_trades_tradesviz(destination: str, orders: dict[int, Order]):
         for order in orders.values():
             if order.status == OrderStatus.CANCELLED and order.filled == 0:
                 continue
-            f.write("%s,%s,%s,stock,%.3f,USD,%d,%.3f,%s,\n" % (
+            f.write("%s,%s,%s,stock,%.3f,USD,%d,%.3f,,\n" % (
                     order.date_time_last_update.strftime('%Y%m%d'),
                     order.date_time_last_update.strftime('%H:%M:%S'),
                     order.symbol,
                     order.avg_price,
                     order.filled if order.action == OrderAction.BUY else -order.filled,
-                    order.fee,
-                    ''))
+                    order.fee
+                    ))
             n += 1
             
     logger.info(f"Exported {n} orders to {destination}.")

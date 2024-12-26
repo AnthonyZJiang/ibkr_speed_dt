@@ -119,7 +119,7 @@ class Order:
     def finalise(self):
         self.date_time_last_update = datetime.datetime.now()
         self.value = self.avg_price * self.filled
-        self.fee = 0.005 * self.value
+        self.fee = 0.005 * self.filled
         self.unfilled = self.quantity - self.filled
         if self.unfilled == 0:
             self.status = OrderStatus.FILLED
