@@ -7,7 +7,7 @@ import time
 from .tws_app import TWSApp
 from .util.twslogging import setup_logger
 from .tws_app.datastore.order import Order, OrderAction
-from .tws_app.datastore.fundamentals import StockFundamentals
+from .util.fundamentals import StockFundamentals
 from .util.tradesexport import export_funcs
 
 

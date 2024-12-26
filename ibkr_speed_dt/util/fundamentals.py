@@ -10,6 +10,7 @@ class StockFundamentals():
         self.float = 0
         self.shortable_shares = 0
         self.short_ratio = 0
+        self.high_52w = 0
         self.country = ""
         self.exchange = ""
         self.short_name = ""
@@ -43,6 +44,7 @@ class StockFundamentals():
     @staticmethod
     def from_fl(sym):
         def get_key_value(key, dict, default=None):
+            key = key.value
             return dict[key] if key in dict else default
         f = StockFundamentals(sym)
         ticker_info = FinvizLite(sym).ticker_fundament()
@@ -54,6 +56,7 @@ class StockFundamentals():
         f.exchange = get_key_value(FKey.exchange, ticker_info, "Unknown")
         f.short_name = get_key_value(FKey.company, ticker_info, "Unknown")
         f.sector = get_key_value(FKey.sector, ticker_info, "Unknown")
+        f.high_52w = get_key_value(FKey.high_52w, ticker_info, -1)
         f.ceo = "Unknown"
         return f
         
@@ -64,13 +67,13 @@ class StockFundamentals():
         print(f"Symbol: [green]{self.symbol}")
         print(f"Short Name: [green]{self.short_name}")
         print(f"Sector: [green]{self.sector}")
+        print(f"Country: {country_color}{self.country}")
+        print(f"CEO: [green]{self.ceo}")
+        print(f"Exchange: [green]{self.exchange}")
         print(f"Market Cap: [green]${self.mark_cap}")
         print(f"Float: {float_color}{self.float}")
         print(f"Shortable Shares: [green]{self.shortable_shares}")
         print(f"Short ratio: [green]{self.short_ratio}")
-        print(f"Country: {country_color}{self.country}")
-        print(f"CEO: [green]{self.ceo}")
-        print(f"Exchange: [green]{self.exchange}")
         
     @staticmethod
     def numeric_description_to_num(num):

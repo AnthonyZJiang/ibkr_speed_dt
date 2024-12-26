@@ -3,7 +3,7 @@ import json
 
 from ibkr_speed_dt.util.twslogging import setup_logger
 from .datastore.order import Order
-from .datastore.fundamentals import StockFundamentals
+from ..util.fundamentals import StockFundamentals
 from .datastore.accountentry import TWSAccountEntry
 
 DEF_TICK_REQ_ID = 2000
