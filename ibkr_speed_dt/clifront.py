@@ -1,4 +1,5 @@
 from rich.console import Console
+from rich.prompt import Confirm, Prompt
 from threading import Thread
 import logging
 import time
@@ -87,11 +88,9 @@ class CLIFront:
         self.print_tracking_symbol = True
         val = input("")
         if val == "exit":
-            ans = input("Do you want to export the trades? (y/n)")
-            if ans == "y":
-                ans = input("Enter the file name: (default: trades.csv)")
-                if ans == "":
-                    ans = "trades.csv"
+            ans = Confirm.ask("Do you want to export the trades?")
+            if ans:
+                ans = Prompt.ask("Enter the file name", default="trades.csv")
                 self.export_trades(ans)
             self.logger.info("Exiting")
             self.tws_app.disconnect()
