@@ -67,7 +67,7 @@ class StockFundamentals():
         print(f"Symbol: [green]{self.symbol}")
         print(f"Short Name: [green]{self.short_name}")
         print(f"Sector: [green]{self.sector}")
-        print(f"Country: {country_color}{self.country}")
+        print(f"Location: {country_color}{self.country}")
         print(f"CEO: [green]{self.ceo}")
         print(f"Exchange: [green]{self.exchange}")
         print(f"Market Cap: [green]${self.mark_cap}")

@@ -16,7 +16,7 @@ DEFAULT_ORDER_SIZE = 100
 class CLIFront:
     
     def __init__(self, platform_type: str):
-        self.logger = setup_logger('sim_cli', logging.INFO, logging.DEBUG, 'sim.log')
+        self.logger = setup_logger('sdt', logging.INFO, logging.DEBUG, 'sdt.log')
         self.logger.info("Simulator initialising...")
         self.tws_app = None
         self.app_thread = None

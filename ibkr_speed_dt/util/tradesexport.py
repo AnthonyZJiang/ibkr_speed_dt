@@ -4,12 +4,12 @@ from .twslogging import setup_logger
 
 
 def export_trades_tradesviz(destination: str, orders: dict[int, Order]):
-    logger = setup_logger()
+    logger = setup_logger('sdt')
     header = "date,time,symbol,asset_type,price,currency,quantity,commission,tags,notes\n"
     if Path(destination).exists():
         with open(destination, "r") as f:
             first_line = f.readline()
-        write_header = first_line == header
+        write_header = first_line != header
     else:
         write_header = True
     n = 0
@@ -38,7 +38,7 @@ def export_trades_tradervue(destination: str, orders: dict[int, Order]):
     if Path(destination).exists():
         with open(destination, "r") as f:
             first_line = f.readline()
-        write_header = first_line == header
+        write_header = first_line != header
     else:
         write_header = True
     n = 0
