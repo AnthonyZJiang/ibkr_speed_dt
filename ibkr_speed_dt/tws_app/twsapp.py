@@ -1,10 +1,11 @@
 from decimal import Decimal
+from time import sleep
 
 from ibapi.client import *
 from ibapi.common import TickAttribBidAsk
 from ibapi.contract import ContractDetails
 from ibapi.wrapper import *
-from ibapi.order import Order as IBOrder
+from ibapi.account_summary_tags import AccountSummaryTags
 
 from .twscommon import TWSCommon
 from .contractdetails import TWSContractDetails
@@ -44,12 +45,16 @@ class TWSApp(EWrapper, EClient, TWSContractDetails, TWSDisplayGroup, TWSTrade, T
         self.tws_common.is_ready = True
         self.reqAccountUpdates(True, self.tws_common.ibkr_account)
         TWSTrade.nextValidId(self, orderId)
+        self.reqAccountSummary(9001, "All", AccountSummaryTags.BuyingPower)
         
     def orderStatus(self, *args):
         TWSTrade.orderStatus(self, *args)
         
     def updatePortfolio(self, *args):
         TWSAccount.updatePortfolio(self, *args)
+        
+    def  accountSummary(self, *args):
+        TWSAccount.accountSummary(self, *args)
 
     def error(self, reqId, errorCode, errorString, placeholder=None):
         if reqId == -1:

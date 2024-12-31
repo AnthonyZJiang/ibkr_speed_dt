@@ -29,7 +29,7 @@ class TWSAccountEntry():
             self.quantity_in_sell_orders += unfilled
         
     def _add_sell_order(self, order: Order):
-        if order.status == OrderStatus.FILLED or order.status == OrderStatus.CANCELLED:
+        if order.status == OrderStatus.FILLED or order.status == OrderStatus.CANCELLED or order.status == OrderStatus.INACTIVE:
             return
         self.open_sell_orders[order.id] = order.unfilled
         self.quantity_in_sell_orders += order.unfilled

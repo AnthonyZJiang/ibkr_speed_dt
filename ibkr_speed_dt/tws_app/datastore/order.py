@@ -72,19 +72,25 @@ class Order:
         self.unfilled = quantity
         self.status = OrderStatus.PENDING_SUBMIT
         
-        self.ib_order = IBOrder()
-        self.ib_order.action = 'BUY' if self.action == OrderAction.BUY else 'SELL'
-        self.ib_order.totalQuantity = self.quantity
-        self.ib_order.orderType = self.order_type.value
-        self.ib_order.lmtPrice = self.limit if self.limit is not None else UNSET_DOUBLE
-        self.ib_order.auxPrice = self.stop if self.stop is not None else UNSET_DOUBLE
-        self.ib_order.outsideRth = True
+        self._ib_order = None
         
         self.contract = Contract()
         self.contract.symbol = symbol
         self.contract.exchange = "smart"
         self.contract.currency = "USD"
         self.contract.secType = "STK"
+        
+    @property
+    def ib_order(self):
+        if self._ib_order is None:
+            self._ib_order = IBOrder()
+            self.ib_order.action = 'BUY' if self.action == OrderAction.BUY else 'SELL'
+            self.ib_order.totalQuantity = self.quantity
+            self.ib_order.orderType = self.order_type.value
+            self.ib_order.lmtPrice = self.limit if self.limit is not None else UNSET_DOUBLE
+            self.ib_order.auxPrice = self.stop if self.stop is not None else UNSET_DOUBLE
+            self.ib_order.outsideRth = True
+        return self._ib_order
     
     def __str__(self):
         return "Order#%-3d %-4s %s %-6s | %-12s | LMT: %3.2f STP: %3.2f FILLED: %4d/%4d | AVG_PRC: %5.2f | FEE: %5.2f" % (

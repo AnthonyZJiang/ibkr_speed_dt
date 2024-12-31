@@ -16,4 +16,7 @@ class TWSAccount():
         else:
             self.tws_common.current_positions[contract.symbol] = TWSAccountEntry(int(position))
             
-    
+    def accountSummary(self, reqId: int, account: str, tag: str, value: str,currency: str):
+        if account == self.tws_common.ibkr_account:
+            if tag == 'CashBalance':
+                self.tws_common.current_positions['cash'] = float(value)
