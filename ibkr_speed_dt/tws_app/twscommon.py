@@ -24,7 +24,6 @@ class TWSCommon:
         self.exit_flag = False
         self.is_ready = False
         self.tick_req_id: int = DEF_TICK_REQ_ID
-        self.mrk_data_req_id: int = 0
         self.tick_req_id_symbol_map: dict[int, str] = {}
         self.fundamentals: dict[str, StockFundamentals] = {}
         self.completed_orders: dict[int, Order] = {}
