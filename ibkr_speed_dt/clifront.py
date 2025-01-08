@@ -98,6 +98,8 @@ class CLIFront:
         return self._process_command(val.lower().split())
     
     def _process_command(self, args: dict[str]):
+        if not args:
+            return True
         nargs = len(args)
 
         match args[0]:
