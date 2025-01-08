@@ -24,6 +24,7 @@ class CLIFront:
         self.default_quantity = DEFAULT_ORDER_SIZE
         self.console = Console()
         self.platform_type = platform_type
+        self.default_export_trades_file = "trades.csv"
         
     def run(self):
         self.tws_app = TWSApp(self.platform_type)
@@ -52,46 +53,27 @@ class CLIFront:
         self.app_thread.join()
         
     def _gui_update_callback_tracked_symbol(self, symbol):
-        print(f"Platform: {self.platform_type.upper()} | Tracking: {symbol}")
+        print(f"Platform: {self.platform_type.upper()} | Account: {self.tws_app.tws_common.ibkr_account_name} | Tracking: {symbol}")
 
     def _place_order(self, order: Order):
         if order.symbol is None:
             return
-        if not self._confirm_order_instant_exe(order):
-            return
         self.tws_app.place_order(order)
-
-    def _confirm_order_instant_exe(self, order: Order):
-        # if order.action == OrderAction.BUY:
-        #     if order.limit is not None and order.limit > self.tws_app.tws_common.current_ask:
-        #         self.console.print("[yellow]Instant execution because limit price is higher than the ask price! Proceed? [y/n]")
-        #         if input().lower() != "y":
-        #             return False
-        #     if order.stop is not None and order.stop < self.tws_app.tws_common.current_ask:
-        #         self.console.print("[yellow]Instant execution because stop price is lower than the ask price! Proceed? [y/n]")
-        #         if input().lower() != "y":
-        #             return False
-        # elif order.action == OrderAction.SELL:
-        #     if order.limit is not None and order.limit < self.tws_app.tws_common.current_bid:
-        #         self.console.print("[yellow]Instant execution because limit price is lower than the bid price! Proceed? [y/n]")
-        #         if input().lower() != "y":
-        #             return False
-        #     if order.stop is not None and order.stop > self.tws_app.tws_common.current_bid:
-        #         self.console.print("[yellow]Instant execution because stop price is lower than the bid price! Proceed? [y/n]")
-        #         if input().lower() != "y":
-        #             return False
-        return True
+        
+    def _export_trades(self):
+        ans = Confirm.ask("Do you want to export the trades?")
+        if ans:
+            ans = Prompt.ask("Enter the file name", default=self.default_export_trades_file)
+        export_funcs[self.tws_app.tws_common.config['export_csv_style']](ans, self.tws_app.tws_common.completed_orders)
 
     def _take_command(self):
         if self.print_tracking_symbol:
-            print(f"Platform: {self.platform_type.upper()} | Tracking: {self.tws_app.tws_common.current_symbol}")
+            self._gui_update_callback_tracked_symbol(self.tws_app.tws_common.current_symbol)
         self.print_tracking_symbol = True
         val = input("")
         if val == "exit":
-            ans = Confirm.ask("Do you want to export the trades?")
-            if ans:
-                ans = Prompt.ask("Enter the file name", default="trades.csv")
-                self.export_trades(ans)
+            if not self.tws_app.tws_common.config['bypass_export']:
+                self._export_trades()
             self.logger.info("Exiting")
             self.tws_app.disconnect()
             return False
@@ -141,11 +123,7 @@ class CLIFront:
                 order_id = int(args[1])
                 self.tws_app.cancel_order(order_id)
             case "export":
-                if nargs == 1:
-                    dest = "trades.csv"
-                else:
-                    dest = args[1]
-                self.export_trades(dest)
+                self._export_trades()
             case "get":
                 if nargs == 1:
                     print("No value provided")
@@ -213,15 +191,20 @@ class CLIFront:
                 print("Default quantity set to", self.default_quantity)
             case "allow_short":
                 if nargs == 1:
-                    print("No value provided")
-                    return
-                self.tws_app.tws_common.allow_short = True if args[1] == "1" else False
+                    val = Prompt.ask("Enter 1 to allow short selling", choices=["1", "0"], default="0")
+                else:
+                    val = args[1]
+                self.tws_app.tws_common.allow_short = True if val == "1" else False
                 print("Short selling is", "enabled" if self.tws_app.tws_common.allow_short else "disabled")
+            case "account":
+                if nargs == 1:
+                    val = Prompt.ask("Enter the account name", choices=self.tws_app.tws_common.ibkr_accounts.keys(), default=self.tws_app.tws_common.ibkr_account_name)
+                else:
+                    val = args[1]
+                self.tws_app.tws_common.ibkr_account_name = val
+                print("Account set to", self.tws_app.tws_common.ibkr_account_name)
             case _:
                 print("Unknown parameter")
-        
-    def export_trades(self, dest: str):
-        export_funcs[self.tws_app.tws_common.config['export_csv_style']](dest, self.tws_app.tws_common.completed_orders)
 
     def _print_help(self):
         self.console.rule("Commands")
@@ -237,4 +220,5 @@ class CLIFront:
         self.console.print("get f <symbol> [green]Get fundamentals for the specified symbol")
         self.console.print("set <default_quantity <quantity>> [green]Set the default quantity, default is 100")
         self.console.print("set <allow_short <1|0>> [green]Set 1 to allow short selling")
+        self.console.print("set <account <account_name>> [green]Set the account name")
         self.console.print("exit [green]Exit the program")

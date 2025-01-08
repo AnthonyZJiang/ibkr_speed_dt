@@ -19,7 +19,8 @@ class TWSCommon:
         self.platform_type = platform_type
         self.allow_short = False
         self.ibkr_port = 0
-        self.ibkr_account = ''
+        self.ibkr_accounts = {}
+        self.ibkr_account_name = ''
         
         self.exit_flag = False
         self.is_ready = False
@@ -42,6 +43,14 @@ class TWSCommon:
         self.gui_update_callback_tracked_symbol = None
         
         self.get_config()
+        
+    @property
+    def ibkr_account(self):
+        if not self.ibkr_account_name:
+            return ''
+        if self.ibkr_account_name not in self.ibkr_accounts:
+            raise ValueError(f"Account {self.ibkr_account_name} not found in config.")
+        return self.ibkr_accounts[self.ibkr_account_name]
 
     def get_config(self):
         with open('config.json') as f:
@@ -49,7 +58,8 @@ class TWSCommon:
         
         self.allow_short = self.get_dict_value(self.config, 'allow_short', False)
         self.ibkr_port = self.get_dict_value(self.config, f'ibkr_port_{self.platform_type}', 7497)
-        self.ibkr_account = self.get_dict_value(self.config, f'ibkr_account_{self.platform_type}', '')
+        self.ibkr_accounts = self.get_dict_value(self.config, f'ibkr_account_{self.platform_type}', '') # type: dict[str, str]
+        self.ibkr_account_name = list(self.ibkr_accounts.keys())[0] 
         
     @staticmethod
     def get_dict_value(dict_obj: dict, key: str, default=None):

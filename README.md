@@ -118,4 +118,3 @@ exit
 1. `cl`: add an `oca` or `o` argument, i.e. one cancel all, to cancel all sell orders to close the full quantity.
 2. `cl`: limit order instead of market order for extended trading hours.
 3. `set`: save configurations to `config.json`
-4. `exit`: option to bypass export.

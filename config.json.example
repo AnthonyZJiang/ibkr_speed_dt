@@ -1,9 +1,16 @@
 {
     "ibkr_port_paper": 7497,
     "ibkr_port_live": 7496,
-    "ibkr_account_paper": "DU012345",
-    "ibkr_account_live": "DU012345",
+    "ibkr_account_paper": {
+        "paper1": "DU012345",
+        "paper2": "DU012346"
+        },
+    "ibkr_account_live": {
+        "cash1": "DU012345", 
+        "cash2": "DU012346"
+        },
     "allow_shorting": false,
     "export_csv_style": "tradesviz",
-    "default_display_group": 1
+    "default_display_group": 1,
+    "bypass_export": false
 }
