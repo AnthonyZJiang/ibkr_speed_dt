@@ -50,8 +50,8 @@ class Order:
         self.symbol = symbol
         self.action = action
         self.quantity = quantity
-        self.limit = round(limit,2) if limit is not None else limit
-        self.stop = round(stop,2) if stop is not None else stop
+        self.limit = round(limit,4 if limit < 1 else 2) if limit is not None else limit
+        self.stop = round(stop,4 if limit < 1 else 2) if stop is not None else stop
         self.order_type = OrderType.ERROR
         if self.action == OrderAction.BUY:
             if self.stop is None:
