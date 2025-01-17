@@ -181,20 +181,25 @@ class CLIFront:
     def _set_parameters(self, *args):
         nargs = len(args)
         if nargs == 0:
+            val = Prompt.ask("What do you want to set?", choices=["default_qty", "allow_short", "account", "cancel"])
+            if val == "cancel":
+                return
+            self._set_parameters(val)
             return
         match args[0]:
-            case "default_quantity":
+            case "default_qty":
                 if nargs == 1:
-                    print("No value provided")
-                    return
-                self.default_quantity = int(args[1])
+                    val = Prompt.ask(f"Enter the default quantity, current is {self.default_quantity}")
+                else:
+                    val = args[1]
+                self.default_quantity = int(val)
                 print("Default quantity set to", self.default_quantity)
             case "allow_short":
                 if nargs == 1:
-                    val = Prompt.ask("Enter 1 to allow short selling", choices=["1", "0"], default="0")
+                    val = Prompt.ask("Enable short selling?", choices=["y", "n"], default="y" if self.tws_app.tws_common.allow_short else "n")
                 else:
                     val = args[1]
-                self.tws_app.tws_common.allow_short = True if val == "1" else False
+                self.tws_app.tws_common.allow_short = True if val == "y" or val == "1" else False
                 print("Short selling is", "enabled" if self.tws_app.tws_common.allow_short else "disabled")
             case "account":
                 if nargs == 1:
@@ -219,6 +224,6 @@ class CLIFront:
         self.console.print("get f [green]Get fundamentals for the current symbol")
         self.console.print("get f <symbol> [green]Get fundamentals for the specified symbol")
         self.console.print("set <default_quantity <quantity>> [green]Set the default quantity, default is 100")
-        self.console.print("set <allow_short <1|0>> [green]Set 1 to allow short selling")
+        self.console.print("set <allow_short <1|y|0|n>> [green]Set 1 or y to allow short selling")
         self.console.print("set <account <account_name>> [green]Set the account name")
         self.console.print("exit [green]Exit the program")
