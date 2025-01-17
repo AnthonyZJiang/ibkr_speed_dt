@@ -2,7 +2,6 @@ from ibapi.wrapper import *
 
 from .twscommon import TWSCommon
 from .datastore.accountentry import TWSAccountEntry
-from .datastore.order import Order, OrderStatus
 
 
 class TWSAccount():
