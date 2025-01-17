@@ -7,7 +7,6 @@ import copy
 from ibapi.wrapper import *
 from ibapi.client import EClient
 from ibapi.order_cancel import OrderCancel
-from ibapi.order import Order as IBOrder
 
 from .datastore.order import Order, OrderStatus, OrderAction
 from .twscommon import TWSCommon

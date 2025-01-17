@@ -1,5 +1,4 @@
 from decimal import Decimal
-from time import sleep
 
 from ibapi.client import *
 from ibapi.common import TickAttribBidAsk
