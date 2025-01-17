@@ -17,7 +17,6 @@ class TWSCommon:
         self.logger = setup_logger('twsapp', logging.INFO, logging.DEBUG, 'twsapp.log')
         
         self.platform_type = platform_type
-        self.allow_short = False
         self.ibkr_port = 0
         self.ibkr_accounts = {}
         self.ibkr_account_name = ''
@@ -51,15 +50,26 @@ class TWSCommon:
         if self.ibkr_account_name not in self.ibkr_accounts:
             raise ValueError(f"Account {self.ibkr_account_name} not found in config.")
         return self.ibkr_accounts[self.ibkr_account_name]
+    
+    @property
+    def allow_short(self):
+        return self.get_dict_value(self.config, 'allow_shorting', False)
+    
+    @allow_short.setter
+    def allow_short(self, value: bool):
+        self.config['allow_shorting'] = value
 
     def get_config(self):
         with open('config.json') as f:
             self.config = json.load(f)
         
-        self.allow_short = self.get_dict_value(self.config, 'allow_short', False)
         self.ibkr_port = self.get_dict_value(self.config, f'ibkr_port_{self.platform_type}', 7497)
         self.ibkr_accounts = self.get_dict_value(self.config, f'ibkr_account_{self.platform_type}', '') # type: dict[str, str]
         self.ibkr_account_name = list(self.ibkr_accounts.keys())[0] 
+        
+    def save_config(self):
+        with open('config.json', 'w') as f:
+            json.dump(self.config, f)
         
     @staticmethod
     def get_dict_value(dict_obj: dict, key: str, default=None):
